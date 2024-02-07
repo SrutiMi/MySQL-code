@@ -43,8 +43,8 @@ CREATE TABLE Sales(
   I_no INT,
   C_id VARCHAR(20),
   Sales_date VARCHAR(20),
-  FOREIGN KEY (I_no) REFERENCES Item(I_no),
-  FOREIGN KEY (C_id) REFERENCES Customer(C_id)
+  FOREIGN KEY (I_no) REFERENCES Item(I_no) ON DELETE CASCADE,
+  FOREIGN KEY (C_id) REFERENCES Customer(C_id) ON DELETE CASCADE
 
 );
 
@@ -56,7 +56,7 @@ INSERT INTO Item (I_name, type, price, colour) VALUES
 ('Coffee Maker', 'Appliance', 50.00, 'White'),
 ('Running Shoes', 'Apparel', 80.00, 'Blue'),
 ('Desk Chair', 'Furniture', 150.00, 'Black'),
-('Electric Kettle', 'Appliance', 30.00, 'White'),
+('Electric Kettle', 'Appliance', 30.00, 'White');
 
 
 -- Insert into Customer table
@@ -71,15 +71,19 @@ INSERT INTO Customer (C_id, Cname, phone, city) VALUES
 
 -- Insert into Sales
 INSERT INTO Sales VALUES
-(1, 100, 'C001', 'SEP, 23'),
-(2, 101, 'C002', 'SEP, 23'),
-(3, 102, 'C003', 'SEP, 23'),
-(4, 103, 'C004', 'SEP, 23'),
-(5, 104, 'C005', 'SEP, 23'),
-(6, 105, 'C006', 'SEP, 23'),
-(7, 106, 'C007', 'SEP, 23');
+(1, 100, 'C001', '2023-09-01'),
+(2, 101, 'C002', '2023-09-01'),
+(3, 102, 'C003', '2023-09-01'),
+(4, 103, 'C004', '2023-09-01'),
+(5, 104, 'C005', '2023-09-01'),
+(6, 105, 'C006', '2023-09-01'),
+(7, 106, 'C007', '2023-09-01');
 
+-- (a) Display name of each customer and total price of all items purchased by him/her.
+SELECT Customer.* , SUM(Item.price) FROM Customer JOIN sales ON Customer.C_id = Sales.C_id JOIN Item ON Item.I_no = Sales.I_no GROUP BY Customer.C_id;
 
+--(b) Display all customers from Kolkata and Bardhaman who have purchased an electric kettle in SEP, 23
+SELECT Customer.*  FROM Customer JOIN Sales ON Customer.C_id = Sales.C_id JOIN Item ON Item.I_no = Sales.I_no WHERE Customer.city ='Kolkata' OR Customer.city= 'Bardhaman' AND Item.I_name="Electric Kettle" AND sales.sales_date LIKE "2023-09-__";
 
 
 
